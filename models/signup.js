@@ -2,14 +2,14 @@ const mongoose=require('mongoose')
 
 const signupSchema=mongoose.Schema(
     {
-        FirstName:String,
-        LastName:String,
-        UserId:String,
-        Password:String,
-        Unit:String,
-        City:String,
-        Province:String,
-        Zip:String
+        FirstName:{type:String, required:true},
+        LastName:{type:String, required:true},
+        UserId:{type:String, required:true},
+        Password:{type:String, required:true},
+        Unit:{type:String, required:true},
+        City:{type:String, required:true},
+        Province:{type:String, required:true},
+        Zip:{type:String, required:true}
     },{
         versionKey:false//turn off mongo version.
 
