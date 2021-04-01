@@ -3,7 +3,8 @@ const mongoose=require('mongoose')
 const loginSchema=mongoose.Schema(
     {
         UserId:String,
-        Password:String
+        Password:String,
+        Role:String
     },{
         versionKey:false//turn off mongo version.
 

@@ -7,6 +7,7 @@ exports.matchUser = async (req, res) => {
     var matchResult = await Login.find({
       UserId: req.body.UserId,
       Password: req.body.Password,
+      Role:req.body.Role
     });
     //console.log(matchResult);
     res.header("Content-Type", "application/json");
@@ -29,6 +30,7 @@ exports.addUser = async (req, res) => {
     var result = await Login.insertMany({
       UserId: req.body.UserId,
       Password: req.body.Password,
+      Role:"customer"
     });
     res.header("Content-Type", "application/json");
 

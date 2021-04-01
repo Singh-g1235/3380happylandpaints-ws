@@ -9,7 +9,8 @@ const signupSchema=mongoose.Schema(
         Unit:{type:String, required:true},
         City:{type:String, required:true},
         Province:{type:String, required:true},
-        Zip:{type:String, required:true}
+        Zip:{type:String, required:true},
+        Role:{type:String, default:"customer"}
     },{
         versionKey:false//turn off mongo version.
 
