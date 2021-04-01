@@ -19,8 +19,10 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json());
 
  const loginRouter = require('./routes/loginRoute');
+ const signupRouter = require('./routes/signupRoute');
 
  app.use('/login',loginRouter)
+ app.use('/signup',signupRouter)
 
 
 
