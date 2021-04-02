@@ -13,13 +13,13 @@ const productDetailsSchema = mongoose.Schema(
 )
 const orderSchema = mongoose.Schema(
     {
-        orderId: String,
-        userId: String,
-        oderDate: Date,
-        deliveryDate: Date,
-        productDetails: productDetailsSchema,
-        orderAmount: Number,
-        orderStatus: String
+        OrderId: String,
+        UserId: String,
+        OrderDate: Date,
+        DeliveryDate: Date,
+        ProductDetails: [productDetailsSchema],
+        OrderAmount: Number,
+        OrderStatus: String
 
 
     }, {
