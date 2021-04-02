@@ -1,8 +1,15 @@
 
-POST http://localhost:8000/login/
+POST http://localhost:8000/signup/
 Content-Type:application/json
 
 {
-    "UserId":"admin",
-    "Password":"admin"
+    "UserId":"navneet",
+    "Password":"navneet",
+    "City":"Surrey",
+    "Unit":"14545 95 Ave",
+    "Province":"BC",
+    "Zip":"V6W6K8",
+    "FirstName":"Navneet",
+    "LastName":"Chahal"
+
 }

@@ -23,6 +23,10 @@ app.use(bodyParser.json());
 
  app.use('/login',loginRouter)
  app.use('/admin',adminRouter)
+ const signupRouter = require('./routes/signupRoute');
+
+ app.use('/login',loginRouter)
+ app.use('/signup',signupRouter)
 
 
 
