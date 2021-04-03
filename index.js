@@ -19,6 +19,10 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json());
 
  const loginRouter = require('./routes/loginRoute');
+ const adminRouter = require('./routes/adminRoute');
+
+ app.use('/login',loginRouter)
+ app.use('/admin',adminRouter)
  const signupRouter = require('./routes/signupRoute');
 
  app.use('/login',loginRouter)
@@ -32,7 +36,9 @@ app.listen(port, () => {
     try{
     mongoose.connect(url,
          { useNewUrlParser: true, 
-            useUnifiedTopology: true})   
+            useUnifiedTopology: true,
+            useFindAndModify: false }
+            )   
         }
         catch(ex)
             {
