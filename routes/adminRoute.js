@@ -12,6 +12,8 @@ route.post('/product', adminController.addProduct)
 route.put('/product',adminController.updateProduct)
 route.delete('/product',adminController.deleteProduct)
 
+route.put('/vendor',adminController.approveSupply)
+
 route.get('/users', adminController.getUsers)
 route.get('/user/:userId', adminController.getUser)
 route.post('/user', adminController.addUser)

@@ -9,7 +9,7 @@ exports.getProducts = async (req, res) => {
   
     try {
         var productList = await Product.find();
-        if (productList.count === 0) {
+        if (!productList) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Could not find products` })
@@ -31,7 +31,7 @@ exports.getProduct = async (req, res) => {
     try {
         var product = await Product.findOne({ ProductId: req.params.productId }).exec();
         
-        if (product.count === 0) {
+        if (!product) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Could not find ${req.params.productId}` })
@@ -124,7 +124,7 @@ exports.deleteProduct = async (req, res) => {
 
     try {
         deletedProductResult = await Product.findOneAndDelete({ ProductId: req.body.ProductId })
-        if(deletedProductResult.count === 0){
+        if(!deletedProductResult){
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Product Not Found ${req.body.ProductId}` })
@@ -147,7 +147,7 @@ exports.getOrders = async (req, res) => {
     
     try {
         var orderList = await Order.find();
-        if (orderList.count === 0) {
+        if (!orderList) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Could not find orders` })
@@ -167,7 +167,7 @@ exports.getOrder = async (req, res) => {
     try {
         var order = await Order.findOne({ OrderId: req.params.orderId }).exec();
         
-        if (order.count === 0) {
+        if (!order) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Could not find ${req.params.orderId}` })
@@ -210,7 +210,7 @@ exports.shipOrder = async (req, res) => {
 exports.getUsers = async (req, res) => {
     try {
         var userList = await SignUp.find();
-        if (userList.count === 0) {
+        if (!userList) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Could not find user` })
@@ -230,7 +230,7 @@ exports.getUser = async (req, res) => {
     try {
         var user = await SignUp.findOne({ UserId: req.params.userId }).exec();
         
-        if (user.count === 0) {
+        if (!user) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Could not find ${req.params.userId}` })
@@ -251,7 +251,7 @@ exports.getUser = async (req, res) => {
     }
 }
 exports.addUser = async (req, res) => {
-    console.log("Received request to add User");
+   
   try {
     var user = {
       "UserId": req.body.UserId,
@@ -316,7 +316,7 @@ exports.deleteUser = async (req, res) => {
     try {
         deletedUserResult = await SignUp.findOneAndDelete({ UserId: req.body.UserId })
         deletedLoginResult = await Login.findOneAndDelete({ UserId: req.body.UserId })
-        if(deletedUserResult.count === 0 || deletedLoginResult.count === 0){
+        if(!deletedUserResult || !deletedLoginResult){
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `User not found ${req.body.UserId}` })
@@ -334,6 +334,58 @@ exports.deleteUser = async (req, res) => {
 }
 //controller methods for user end
 
+//controller method for approveSupply begin
+exports.approveSupply = async (req, res) => {
+   
+  
+    try{
+        var fetchProduct = await Product.findOne({ ProductId: req.body.ProductId }).exec();
+       
+        if (!fetchProduct) {
+            var product = 
+            {
+                "ProductId": req.body.ProductId, "ProductName": req.body.ProductName,
+                "ProductDescription": 
+                {
+                "availableColours": req.body.availableColours,
+                "sheen": req.body.sheen, "cleanup": req.body.cleanup,
+                "resinType": req.body.resinType, "recommendedUse": req.body.recommendedUse,
+                "mpiRating": req.body.mpiRating, "vocLevel": req.body.vocLevel
+                },
+                "ProductQuantity": req.body.ProductQuantity,"ProductImage": "","ProductType": req.body.ProductType,
+                "ProductAmount": req.body.ProductAmount
+            }
+       
+            var productData = new Product(product);
+            await productData.save();
+            
+            res.status(200)
+            res.header("Content-Type", "application/json")
+            res.send(productData);
+
+        } else {
+        
+            let options = { upsert: true, new: true, setDefaultsOnInsert: true };
+            var update = 
+            { $inc: 
+                {"ProductQuantity": req.body.ProductQuantity}   
+            }
+           
+            updatedProductResult = await Product.findOneAndUpdate({ProductId:req.body.ProductId},update,options);
+            res.status(200)
+            res.header("Content-Type", "application/json")
+            res.send(updatedProductResult);
+        }
+
+        
+
+    }catch {
+        res.status(500)
+        res.send({ message: `Error in Updating Product with product id ${req.body.ProductId}` })
+
+    }
+}
+//controller method for approveSupply end
 
 
 
