@@ -88,7 +88,7 @@ exports.addProduct = async (req, res) => {
 }
 
 exports.updateProduct = async (req, res) => {
-    console.log("Hi");
+    
   
     try{
         let options = { upsert: true, new: true, setDefaultsOnInsert: true };
