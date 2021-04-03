@@ -1,6 +1,7 @@
 const Product = require("../models/product")  
 const Order = require("../models/order") 
-const SignUp = require("../models/signup")   
+const SignUp = require("../models/signup") 
+const Login = require('../models/login')  
 
 
 //controller methods for products begin
@@ -87,8 +88,10 @@ exports.addProduct = async (req, res) => {
 }
 
 exports.updateProduct = async (req, res) => {
-    
+    console.log("Hi");
+  
     try{
+        let options = { upsert: true, new: true, setDefaultsOnInsert: true };
         var product = 
         {
         "ProductId": req.body.ProductId, "ProductName": req.body.ProductName,
@@ -102,7 +105,8 @@ exports.updateProduct = async (req, res) => {
         "ProductQuantity": req.body.ProductQuantity,"ProductImage": "","ProductType": req.body.ProductType,
         "ProductAmount": req.body.ProductAmount
         }
-        updatedProductResult = await Product.findOneAndUpdate({ProductId:req.body.ProductId},product,{new:true});
+       
+        updatedProductResult = await Product.findOneAndUpdate({ProductId:req.body.ProductId},product,options);
         res.status(200)
         res.header("Content-Type", "application/json")
         res.send(updatedProductResult);
@@ -259,8 +263,15 @@ exports.addUser = async (req, res) => {
       "Zip": req.body.Zip,
       "Unit": req.body.Unit
     }
+    var login = {
+        "UserId": req.body.UserId,
+        "Password": req.body.Password,
+        "Role": "customer"
+    }
     var userData = new SignUp(user);
+    var loginData = new Login(login);
     await userData.save();
+    await loginData.save();
     res.status(200)
     res.header("Content-Type", "application/json")
     res.send(userData);
@@ -272,6 +283,7 @@ exports.addUser = async (req, res) => {
 }
 exports.updateUser = async (req, res) => {
     try{
+        let options = { upsert: true, new: true, setDefaultsOnInsert: true };
         var user = {
             "UserId": req.body.UserId,
             "Password": req.body.Password,
@@ -282,7 +294,13 @@ exports.updateUser = async (req, res) => {
             "Zip": req.body.Zip,
             "Unit": req.body.Unit,
           }
-        updatedUserResult = await SignUp.findOneAndUpdate({UserId:req.body.UserId},user,{new:true});
+        var login = {
+            "UserId": req.body.UserId,
+            "Password": req.body.Password,
+            "Role": "customer"
+        }
+        updatedUserResult = await SignUp.findOneAndUpdate({UserId:req.body.UserId},user,options);
+        updatedLoginResult = await Login.findOneAndUpdate({UserId:req.body.UserId},login,options);
         res.status(200)
         res.header("Content-Type", "application/json")
         res.send(updatedUserResult);
@@ -297,7 +315,8 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         deletedUserResult = await SignUp.findOneAndDelete({ UserId: req.body.UserId })
-        if(deletedUserResult.count === 0){
+        deletedLoginResult = await Login.findOneAndDelete({ UserId: req.body.UserId })
+        if(deletedUserResult.count === 0 || deletedLoginResult.count === 0){
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `User not found ${req.body.UserId}` })
