@@ -10,8 +10,10 @@ const port = 8000
 const mongoose=require('mongoose');
 
 const corsOptions = {
-    origin: '*'
+    origin: "http://localhost:3000",
+    credentials: true
 }
+
 
 //Add Cors to the express app
 app.use(cors(corsOptions))
@@ -25,7 +27,6 @@ app.use(bodyParser.json());
  app.use('/admin',adminRouter)
  const signupRouter = require('./routes/signupRoute');
 
- app.use('/login',loginRouter)
  app.use('/signup',signupRouter)
 
 
