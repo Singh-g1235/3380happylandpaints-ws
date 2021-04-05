@@ -120,6 +120,7 @@ exports.updateProduct = async (req, res) => {
 }
 
 exports.deleteProduct = async (req, res) => {
+   
 
     try {
         deletedProductResult = await Product.findOneAndDelete({ ProductId: req.body.ProductId })
@@ -165,7 +166,6 @@ exports.getOrders = async (req, res) => {
 exports.getOrder = async (req, res) => {
     try {
         var order = await Order.findOne({ OrderId: req.params.orderId }).exec();
-       
         
         if (!order) {
             res.status(404);

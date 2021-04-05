@@ -1,3 +1,45 @@
 
-DELETE http://localhost:8000/cart/checkout
+POST http://localhost:8000/signup/getUser
 Content-Type:application/json
+
+{
+    "UserId":"singhl22@student.douglascollege.ca"
+   
+
+}
+
+
+
+POST http://localhost:8000/deleteOrders/
+Content-Type:application/json
+
+{
+    "UserId":"singhl22@student.douglascollege.ca"
+   
+
+}
+
+POST http://localhost:8000/deleteOrders/
+Content-Type:application/json
+
+{
+    "UserId":"singhl22@student.douglascollege.ca",
+    "OrderId":"oid_01"
+   
+
+}
+
+PUT http://localhost:8000/signup/updateUser
+Content-Type:application/json
+
+{
+    "UserId":"singhl22@student.douglascollege.ca",
+    "Password":"lola",
+    "City":"New Westq",
+    "Zip":"1234",
+    "Province":"Alberta",
+    "Unit":"565",
+   
+   
+
+}
