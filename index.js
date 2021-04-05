@@ -22,11 +22,12 @@ app.use(bodyParser.json());
 
  const loginRouter = require('./routes/loginRoute');
  const adminRouter = require('./routes/adminRoute');
+ const signupRouter = require('./routes/signupRoute');
+ const deleteRouter = require('./routes/deleteOrdersRoute');
 
  app.use('/login',loginRouter)
  app.use('/admin',adminRouter)
- const signupRouter = require('./routes/signupRoute');
-
+ app.use('/deleteOrders',deleteRouter)
  app.use('/signup',signupRouter)
 
 
@@ -36,7 +37,7 @@ app.listen(port, () => {
     console.log(`Connecting to Database: ${url}`)
     try{
     mongoose.connect(url,
-         { useNewUrlParser: true, 
+         {  useNewUrlParser: true, 
             useUnifiedTopology: true,
             useFindAndModify: false }
             )   

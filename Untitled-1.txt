@@ -1,15 +1,45 @@
 
-GET http://localhost:8000/login/auth/
+POST http://localhost:8000/signup/getUser
 Content-Type:application/json
 
 {
-    "UserId":"navneet",
-    "Password":"navneet",
-    "City":"Surrey",
-    "Unit":"14545 95 Ave",
-    "Province":"BC",
-    "Zip":"V6W6K8",
-    "FirstName":"Navneet",
-    "LastName":"Chahal"
+    "UserId":"singhl22@student.douglascollege.ca"
+   
+
+}
+
+
+
+POST http://localhost:8000/deleteOrders/
+Content-Type:application/json
+
+{
+    "UserId":"singhl22@student.douglascollege.ca"
+   
+
+}
+
+POST http://localhost:8000/deleteOrders/
+Content-Type:application/json
+
+{
+    "UserId":"singhl22@student.douglascollege.ca",
+    "OrderId":"oid_01"
+   
+
+}
+
+PUT http://localhost:8000/signup/updateUser
+Content-Type:application/json
+
+{
+    "UserId":"singhl22@student.douglascollege.ca",
+    "Password":"lola",
+    "City":"New Westq",
+    "Zip":"1234",
+    "Province":"Alberta",
+    "Unit":"565",
+   
+   
 
 }

@@ -24,7 +24,7 @@ exports.matchUser = async (req, res) => {
       // if there is great Success!! then..
 
       var token = jwt.sign({ id: user._id }, config.secret, {
-        expiresIn: 300 // expires in 5 mins
+        expiresIn: 30000 // expires in 50 mins
       });
       //send the token to client.
       res.status(200).send({ auth: true, token: token });
@@ -56,7 +56,7 @@ exports.addUser = async (req, res) => {
       if (err) return res.status(500).send({auth:false})
       // create a token
       var token = jwt.sign({ id: user._id }, config.secret, {
-        expiresIn: 300 // expires in 4 mins
+        expiresIn: 30000 // expires in 50 mins
       });
       res.status(200).send({ auth: true, token: token });
     }); 
@@ -83,7 +83,7 @@ exports.authorize = async function(req, res) {
     Login.findById(decoded.id, { password: ""}, function (err, user) {
       if (err) return res.status(500).send("There was a problem finding the user.");
       if (!user) return res.status(404).send("No user found.");
-      
+      console.log(user);
       res.status(200).send(user);
     });
 
