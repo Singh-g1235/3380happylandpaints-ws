@@ -12,9 +12,9 @@ exports.addToCart = async (req, res) => {
 
         var cartItem = await Cart.findOne({ ProductId: req.body.ProductId }).exec();
         var productItem = await Product.findOne({ ProductId: req.body.ProductId }).exec();
-        console.log("Line 11 - > " + cartItem)
+       // console.log("Line 11 - > " + cartItem)
         if (!cartItem) {
-            console.log("In null")
+            //console.log("In null")
             var product = {
                 "ProductId": req.body.ProductId,
                 "ProductName": req.body.ProductName,
@@ -22,17 +22,12 @@ exports.addToCart = async (req, res) => {
                 "ProductAmount": req.body.ProductAmount
             }
             var newInventoryItem = { ...productItem, ProductQuantity: productItem.ProductQuantity-- }
-            console.log(
-                "ProductId -> " + req.body.ProductId +
-                "ProductName -> " + req.body.ProductName +
-                "ProductQuantity -> " + 1 +
-                "ProductAmount -> " + req.body.ProductAmount
-            )
+           
             var newCartItem = new Cart(product)
             await newCartItem.save();
             res.status(200)
 
-            console.log(product);
+          
         }
         else {
             var updatedItem = {
@@ -43,7 +38,7 @@ exports.addToCart = async (req, res) => {
             }
             let options = { upsert: true, new: true, setDefaultsOnInsert: true };
             updatedItemResult = await Cart.findOneAndUpdate({ ProductId: req.body.ProductId }, updatedItem, options);
-            console.log(updatedItemResult);
+          
         }
         var productItem = await Product.findOne({ ProductId: req.body.ProductId }).exec();
         let options = { upsert: true, new: true, setDefaultsOnInsert: true };
@@ -190,7 +185,7 @@ exports.deleteCart = async (req, res) => {
             res.status(200)
             res.send(deleteCart);
         }
-        console.log("in the delete")
+       // console.log("in the delete")
 
 
     } catch {
@@ -206,34 +201,21 @@ exports.addToOrders = async (req, res) => {
 
     try {
 
-        console.log("in order item=>" + req.body[0].ProductId);
+        console.log("hi");
+        console.log(req.body.cart);
+        var status="Pending";
 
-        var obj=[];
-
-        var total=req.body.map(ele => ele.ProductAmount).reduce((total, price) => (total + price), 0);
+        var total=req.body.cart.cart.map(ele => ele.ProductAmount).reduce((total, price) => (total + price), 2);
 
         console.log("total"+total);
 
-        // req.body.map((item) => {
-
-        //     console.log(item.ProductName);
-        //      var j={
-        //        };
-             
-
-        //        obj.push(j);
-        //        console.log(obj);
-        //    });
-        
-           console.log("hi after psuh"+obj);
-
         orderCreate =await Orders.insertMany({
-            ProductId: req.body[0].ProductId,
-               ProductName: req.body[0].ProductName, 
-               ProductQuantity: req.body[0].ProductQuantity, 
-               ProductAmount: req.body[0].ProductAmount,
-            Status:"Pending",
-            UserId:user.User,
+            ProductId: req.body.cart.cart[0].ProductId,
+               ProductName: req.body.cart.cart[0].ProductName, 
+               ProductQuantity: req.body.cart.cart[0].ProductQuantity, 
+               ProductAmount: req.body.cart.cart[0].ProductAmount,
+            OrderStatus:status,
+            UserId:req.body.cart.UserId,
             OrderId:uuidv4(),
             OrderAmount:total
            
@@ -247,7 +229,7 @@ exports.addToOrders = async (req, res) => {
             res.status(200)
             res.send(orderCreate);
         }
-        console.log("in the Orders");
+       // console.log("in the Orders");
         
 
     }
