@@ -50,11 +50,18 @@ exports.addUser = async (req, res) => {
 
   var hashedPassword = bcrypt.hashSync(req.body.Password, 8);
 
+  var role="customer";
+  //if the user is admin then change the role.
+  if(req.body.UserId === "admin")
+  {
+    role="admin";
+  }
+
   Login.create(
     {
       UserId: req.body.UserId,
       Password: hashedPassword,
-      Role: "customer",
+      Role: role,
     },
     function (err, user) {
       if (err) return res.status(500).send({ auth: false });
