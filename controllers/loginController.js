@@ -1,5 +1,6 @@
 const Login = require("../models/login");
 
+var loggedUser="";
 //Add in bcrpyt, jsonwebtoken, and config file(for the private key).
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -83,9 +84,11 @@ exports.authorize = async function(req, res) {
     Login.findById(decoded.id, { password: ""}, function (err, user) {
       if (err) return res.status(500).send("There was a problem finding the user.");
       if (!user) return res.status(404).send("No user found.");
-      console.log(user);
+      loggedUser=user;
       res.status(200).send(user);
     });
 
   });
 }
+
+exports.User=loggedUser;

@@ -10,12 +10,11 @@ cartController = require('../controllers/cartController');
 route.post('/', cartController.addToCart)
 route.get('/', cartController.getProducts)
 route.delete('/checkout',cartController.deleteCart)
+route.post('/orders',cartController.addToOrders)
 
 //cart items route
 route.get('/products', cartController.getLoadedCart)
 
-//route.put('/',adminController.updateProduct)
-//route.delete('/delete',cartController.deleteInventory)
 route.delete('/product',cartController.deleteProduct)
 
 //homepage route

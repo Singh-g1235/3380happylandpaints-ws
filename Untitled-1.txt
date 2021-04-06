@@ -1,5 +1,5 @@
 
-POST http://localhost:8000/signup/getUser
+POST http://localhost:8000/cart/orders
 Content-Type:application/json
 
 {

@@ -1,6 +1,11 @@
 const Cart = require("../models/cart")
 const Product = require("../models/product")
+const Orders = require("../models/order")
 
+const user = require("./loginController");
+
+const { v4: uuidv4 } = require('uuid')
+// adding products to cart
 exports.addToCart = async (req, res) => {
 
     try {
@@ -16,17 +21,17 @@ exports.addToCart = async (req, res) => {
                 "ProductQuantity": 1,
                 "ProductAmount": req.body.ProductAmount
             }
-            var newInventoryItem = {...productItem, ProductQuantity : productItem.ProductQuantity--}
+            var newInventoryItem = { ...productItem, ProductQuantity: productItem.ProductQuantity-- }
             console.log(
-                "ProductId -> " +  req.body.ProductId + 
-                "ProductName -> "+ req.body.ProductName+
-                "ProductQuantity -> "+ 1+
-                "ProductAmount -> "+ req.body.ProductAmount
+                "ProductId -> " + req.body.ProductId +
+                "ProductName -> " + req.body.ProductName +
+                "ProductQuantity -> " + 1 +
+                "ProductAmount -> " + req.body.ProductAmount
             )
             var newCartItem = new Cart(product)
             await newCartItem.save();
             res.status(200)
-            
+
             console.log(product);
         }
         else {
@@ -42,8 +47,8 @@ exports.addToCart = async (req, res) => {
         }
         var productItem = await Product.findOne({ ProductId: req.body.ProductId }).exec();
         let options = { upsert: true, new: true, setDefaultsOnInsert: true };
-        var newInventoryItem = {...productItem, ProductQuantity : productItem.ProductQuantity--}
-        newUpdatedInventoryItem = await Product.findOneAndUpdate({ ProductId: req.body.ProductId}, newInventoryItem, options)
+        var newInventoryItem = { ...productItem, ProductQuantity: productItem.ProductQuantity-- }
+        newUpdatedInventoryItem = await Product.findOneAndUpdate({ ProductId: req.body.ProductId }, newInventoryItem, options)
 
     } catch {
         res.status(500)
@@ -52,15 +57,17 @@ exports.addToCart = async (req, res) => {
     }
 
 }
+
+//deleting products from cart
 exports.deleteProduct = async (req, res) => {
 
     try {
         deletedProductResult = await Cart.deleteOne({ ProductId: req.body.ProductId })
-        if(!deletedProductResult){
+        if (!deletedProductResult) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Product Not Found ${req.body.ProductId}` })
-        } else{
+        } else {
             res.status(200)
             res.send(deletedProductResult);
         }
@@ -74,6 +81,7 @@ exports.deleteProduct = async (req, res) => {
     }
 }
 
+//getting the products which user added  in the cart
 exports.getLoadedCart = async (req, res) => {
 
     try {
@@ -95,6 +103,7 @@ exports.getLoadedCart = async (req, res) => {
     }
 }
 
+//getting the products by id
 
 exports.getProduct = async (req, res) => {
 
@@ -122,7 +131,7 @@ exports.getProduct = async (req, res) => {
     }
 }
 
-
+//updating database by deleting the products from cart
 exports.updateProduct = async (req, res) => {
 
 
@@ -145,11 +154,12 @@ exports.updateProduct = async (req, res) => {
     }
 }
 
+//fetching all the products at the homepage
 exports.getProducts = async (req, res) => {
 
     try {
         var productList = await Product.find();
-       
+
         if (!productList) {
             res.status(404);
             res.header("Content-Type", "application/json");
@@ -167,15 +177,16 @@ exports.getProducts = async (req, res) => {
     }
 }
 
+//deleting the product from cart
 exports.deleteCart = async (req, res) => {
 
     try {
-        deleteCart= await Cart.deleteMany({})
-        if(!deleteCart){
+        deleteCart = await Cart.deleteMany({})
+        if (!deleteCart) {
             res.status(404);
             res.header("Content-Type", "application/json");
             res.send({ message: `Cart not cleared` })
-        } else{
+        } else {
             res.status(200)
             res.send(deleteCart);
         }
@@ -188,3 +199,62 @@ exports.deleteCart = async (req, res) => {
 
     }
 }
+
+
+//clearing the cart and adding data to orders table to the database
+exports.addToOrders = async (req, res) => {
+
+    try {
+
+        console.log("in order item=>" + req.body[0].ProductId);
+
+        var obj=[];
+
+        var total=req.body.map(ele => ele.ProductAmount).reduce((total, price) => (total + price), 0);
+
+        console.log("total"+total);
+
+        // req.body.map((item) => {
+
+        //     console.log(item.ProductName);
+        //      var j={
+        //        };
+             
+
+        //        obj.push(j);
+        //        console.log(obj);
+        //    });
+        
+           console.log("hi after psuh"+obj);
+
+        orderCreate =await Orders.insertMany({
+            ProductId: req.body[0].ProductId,
+               ProductName: req.body[0].ProductName, 
+               ProductQuantity: req.body[0].ProductQuantity, 
+               ProductAmount: req.body[0].ProductAmount,
+            Status:"Pending",
+            UserId:user.User,
+            OrderId:uuidv4(),
+            OrderAmount:total
+           
+        });
+
+        if (!orderCreate) {
+            res.status(404);
+            res.header("Content-Type", "application/json");
+            res.send({ message: `Orders not cleared` })
+        } else {
+            res.status(200)
+            res.send(orderCreate);
+        }
+        console.log("in the Orders");
+        
+
+    }
+    catch {
+        res.status(500)
+        res.send({ message: `Error in updating cart` })
+    }
+
+}
+
