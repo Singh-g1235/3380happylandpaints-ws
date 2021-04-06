@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 
 const productDescriptionSchema = mongoose.Schema(
     {
-        availableColours: String,
-        sheen: String,
-        cleanup: String,
-        resinType: String,
-        recommendedUse: String,
-        mpiRating: String,
-        vocLevel: String
+        availableColours: {type:String, required:true},
+        sheen: {type:String, required:true},
+        cleanup: {type:String, required:true},
+        resinType: {type:String, required:true},
+        recommendedUse: {type:String, required:true},
+        mpiRating: {type:String, required:true},
+        vocLevel: {type:String, required:true}
         
     }, {
         versionKey: false 
@@ -16,10 +16,10 @@ const productDescriptionSchema = mongoose.Schema(
 )
 const productSchema = mongoose.Schema(
     {
-        ProductId: String,
-        ProductName: String,
-        ProductQuantity: Number,
-        ProductAmount: Number,
+        ProductId: {type:String, required:true},
+        ProductName: {type:String, required:true},
+        ProductQuantity: {type:Number, required:true},
+        ProductAmount: {type:Number, required:true},
         ProductDescription: productDescriptionSchema,
         
         

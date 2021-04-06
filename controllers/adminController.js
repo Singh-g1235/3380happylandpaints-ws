@@ -3,21 +3,22 @@ const Order = require("../models/order")
 const SignUp = require("../models/signup") 
 const Login = require('../models/login')  
 
+var bcrypt = require("bcryptjs");
 
 //controller methods for products begin
 exports.getProducts = async (req, res) => {
   
-    try {
+    try {  res.header("Content-Type", "application/json");
         var productList = await Product.find();
         if (!productList) {
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `Could not find products` })
             res.send(productList)
 
         } else {
             res.status(200);
-            res.header("Content-Type", "application/json");
+           
             res.send(productList)
         }
     } catch {
@@ -28,25 +29,26 @@ exports.getProducts = async (req, res) => {
 
 exports.getProduct = async (req, res) => {
    
-    try {
+    try {  res.header("Content-Type", "application/json");
+       
         var product = await Product.findOne({ ProductId: req.params.productId }).exec();
         
         if (!product) {
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `Could not find ${req.params.productId}` })
             
             res.send(product)
 
         } else {
             res.status(200);
-            res.header("Content-Type", "application/json");
+           
            
             res.send(product)
         }
     } catch (err) {
         res.status(500);
-        res.header("Content-Type", "application/json");
+       
         res.send({ message: `Error in finding : ${req.params.productId} . ${err.stack}` })
 
     }
@@ -54,7 +56,7 @@ exports.getProduct = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
 
-    try {
+    try {  res.header("Content-Type", "application/json");
         var product = 
         {
             "ProductId": req.body.ProductId, "ProductName": req.body.ProductName,
@@ -72,7 +74,7 @@ exports.addProduct = async (req, res) => {
         var productData = new Product(product);
         await productData.save();
         res.status(200)
-        res.header("Content-Type", "application/json")
+        
         res.send(productData);
         
 
@@ -90,7 +92,7 @@ exports.addProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
     
   
-    try{
+    try {  res.header("Content-Type", "application/json"); 
         let options = { upsert: true, new: true, setDefaultsOnInsert: true };
         var product = 
         {
@@ -108,7 +110,7 @@ exports.updateProduct = async (req, res) => {
        
         updatedProductResult = await Product.findOneAndUpdate({ProductId:req.body.ProductId},product,options);
         res.status(200)
-        res.header("Content-Type", "application/json")
+        
         res.send(updatedProductResult);
         
 
@@ -122,11 +124,11 @@ exports.updateProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
    
 
-    try {
+    try {  res.header("Content-Type", "application/json");
         deletedProductResult = await Product.findOneAndDelete({ ProductId: req.body.ProductId })
         if(!deletedProductResult){
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `Product Not Found ${req.body.ProductId}` })
         } else{
             res.status(200)
@@ -145,17 +147,17 @@ exports.deleteProduct = async (req, res) => {
 //controller methods for order begin
 exports.getOrders = async (req, res) => {
     
-    try {
+    try {  res.header("Content-Type", "application/json");
         var orderList = await Order.find();
         if (!orderList) {
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `Could not find orders` })
-            res.send(orderList)
+          
 
         } else {
             res.status(200);
-            res.header("Content-Type", "application/json");
+           
             res.send(orderList)
         }
     } catch {
@@ -164,37 +166,36 @@ exports.getOrders = async (req, res) => {
     }
 }
 exports.getOrder = async (req, res) => {
-    try {
+    try {  res.header("Content-Type", "application/json");
         var order = await Order.findOne({ OrderId: req.params.orderId }).exec();
         
         if (!order) {
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `Could not find ${req.params.orderId}` })
-            
-            res.send(order)
+        
 
         } else {
             res.status(200);
-            res.header("Content-Type", "application/json");
+           
            
             res.send(order)
         }
     } catch (err) {
         res.status(500);
-        res.header("Content-Type", "application/json");
+       
         res.send({ message: `Error in finding : ${req.params.orderId} . ${err.stack}` })
 
     }
 }
 exports.shipOrder = async (req, res) => {
    
-    try{
+    try {  res.header("Content-Type", "application/json");
         let update = {"OrderStatus" : "Completed"}
         updatedOrderResult = await Order.findOneAndUpdate({OrderId:req.body.OrderId},update,{new:true});
         res.status(200)
         
-        res.header("Content-Type", "application/json")
+        
         res.send(updatedOrderResult);
         
 
@@ -208,17 +209,17 @@ exports.shipOrder = async (req, res) => {
 
 //controller methods for user begin
 exports.getUsers = async (req, res) => {
-    try {
+    try {  res.header("Content-Type", "application/json");
         var userList = await SignUp.find();
         if (!userList) {
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `Could not find user` })
-            res.send(userList)
+        
 
         } else {
             res.status(200);
-            res.header("Content-Type", "application/json");
+           
             res.send(userList)
         }
     } catch {
@@ -227,35 +228,35 @@ exports.getUsers = async (req, res) => {
     }
 }
 exports.getUser = async (req, res) => {
-    try {
+    try {  res.header("Content-Type", "application/json");
         var user = await SignUp.findOne({ UserId: req.params.userId }).exec();
         
         if (!user) {
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `Could not find ${req.params.userId}` })
-            
-            res.send(user)
+        
 
         } else {
             res.status(200);
-            res.header("Content-Type", "application/json");
+           
            
             res.send(user)
         }
     } catch (err) {
         res.status(500);
-        res.header("Content-Type", "application/json");
+       
         res.send({ message: `Error in finding : ${req.params.userId} . ${err.stack}` })
 
     }
 }
 exports.addUser = async (req, res) => {
    
-  try {
+  try {  res.header("Content-Type", "application/json");
+  var hashedPassword = bcrypt.hashSync(req.body.Password, 8);
     var user = {
       "UserId": req.body.UserId,
-      "Password": req.body.Password,
+      "Password": hashedPassword,
       "FirstName": req.body.FirstName,
       "LastName": req.body.LastName,
       "City": req.body.City,
@@ -265,7 +266,7 @@ exports.addUser = async (req, res) => {
     }
     var login = {
         "UserId": req.body.UserId,
-        "Password": req.body.Password,
+        "Password": hashedPassword,
         "Role": "customer"
     }
     var userData = new SignUp(user);
@@ -273,16 +274,17 @@ exports.addUser = async (req, res) => {
     await userData.save();
     await loginData.save();
     res.status(200)
-    res.header("Content-Type", "application/json")
+    
     res.send(userData);
    
   } catch {
     res.status(500);
+    
     res.send({ error: "The user is not authorized" });
   }
 }
 exports.updateUser = async (req, res) => {
-    try{
+    try {  res.header("Content-Type", "application/json");
         let options = { upsert: true, new: true, setDefaultsOnInsert: true };
         var user = {
             "UserId": req.body.UserId,
@@ -302,23 +304,24 @@ exports.updateUser = async (req, res) => {
         updatedUserResult = await SignUp.findOneAndUpdate({UserId:req.body.UserId},user,options);
         updatedLoginResult = await Login.findOneAndUpdate({UserId:req.body.UserId},login,options);
         res.status(200)
-        res.header("Content-Type", "application/json")
+        
         res.send(updatedUserResult);
         
 
     }catch {
         res.status(500)
+        
         res.send({ message: `Error in Updating User with user id ${req.body.UserId}` })
 
     }
 }
 exports.deleteUser = async (req, res) => {
-    try {
+    try {  res.header("Content-Type", "application/json");
         deletedUserResult = await SignUp.findOneAndDelete({ UserId: req.body.UserId })
         deletedLoginResult = await Login.findOneAndDelete({ UserId: req.body.UserId })
         if(!deletedUserResult || !deletedLoginResult){
             res.status(404);
-            res.header("Content-Type", "application/json");
+           
             res.send({ message: `User not found ${req.body.UserId}` })
         } else{
             res.status(200)
@@ -338,7 +341,7 @@ exports.deleteUser = async (req, res) => {
 exports.approveSupply = async (req, res) => {
    
   
-    try{
+    try {  res.header("Content-Type", "application/json");
         var fetchProduct = await Product.findOne({ ProductId: req.body.ProductId }).exec();
        
         if (!fetchProduct) {
@@ -360,7 +363,7 @@ exports.approveSupply = async (req, res) => {
             await productData.save();
             
             res.status(200)
-            res.header("Content-Type", "application/json")
+            
             res.send(productData);
 
         } else {
@@ -373,7 +376,7 @@ exports.approveSupply = async (req, res) => {
            
             updatedProductResult = await Product.findOneAndUpdate({ProductId:req.body.ProductId},update,options);
             res.status(200)
-            res.header("Content-Type", "application/json")
+            
             res.send(updatedProductResult);
         }
 
@@ -381,6 +384,7 @@ exports.approveSupply = async (req, res) => {
 
     }catch {
         res.status(500)
+        
         res.send({ message: `Error in Updating Product with product id ${req.body.ProductId}` })
 
     }
