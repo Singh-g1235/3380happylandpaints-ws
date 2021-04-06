@@ -1,6 +1,6 @@
 const SignUp = require("../models/signup");
 
-var signedUser="";
+var signedUser = "";
 var bcrypt = require("bcryptjs");
 exports.addUser = async (req, res) => {
   console.log("Received request to add User");
@@ -38,8 +38,8 @@ exports.getUser = async (req, res) => {
   console.log("Received request to add User");
   try {
     //set signed user.
-    signedUser=req.body.UserId;
-  
+    signedUser = req.body.UserId;
+
     var matchResult = await SignUp.find({ UserId: req.body.UserId });
     console.log(matchResult.Password);
     res.header("Content-Type", "application/json");
@@ -60,7 +60,6 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   console.log("Received request to Update User");
   try {
-
     var hashedPassword = bcrypt.hashSync(req.body.Password, 8);
     let options = { upsert: true, new: true, setDefaultsOnInsert: true };
     var user = {
@@ -81,7 +80,7 @@ exports.updateUser = async (req, res) => {
     );
     res.status(200);
     res.header("Content-Type", "application/json");
-    res.send({message:"Profile Updated"});
+    res.send({ message: "Profile Updated" });
   } catch {
     res.status(500);
     res.send({ message: `Error in Updating User with id ${signedUser}` });
