@@ -1,10 +1,23 @@
 
-POST http://localhost:8000/cart/orders
+POST http://localhost:8000/cart/email
 Content-Type:application/json
 
 {
-    "UserId":"singhl22@student.douglascollege.ca"
-   
+ 
+  
+  "OrderId": "oid_01",
+  "UserId": "singhl22@student.douglascollege.ca",
+  "OrderAmount": 1080,
+  "OrderStatus": "Completed",
+  "ProductDetails": [
+    {
+      "productId": "hlp_01",
+      "productName": "Othello Waterborne Interior Paint Eggshell",
+      "productQuantity": 12,
+      "productAmount": 89.99
+    }
+  ]
+
 
 }
 
