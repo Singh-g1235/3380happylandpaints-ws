@@ -3,14 +3,14 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 
-const url='mongodb://localhost:27017/paints';
+const url='mongodb+srv://happylandpaints:happy@happylandpaints.su0wq.mongodb.net/paints';
 
 const app = express();
 const port = 8000
 const mongoose=require('mongoose');
 
 const corsOptions = {
-    origin: "http://localhost:3000",
+	origin: "http://localhost:3000",
     credentials: true
 }
 
