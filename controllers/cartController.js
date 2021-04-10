@@ -204,7 +204,7 @@ exports.deleteCart = async (req, res) => {
 //clearing the cart and adding data to orders table to the database
 exports.addToOrders = async (req, res) => {
   try {
-    console.log("hi");
+    
     console.log(req.body.cart);
     var status = "Pending";
 

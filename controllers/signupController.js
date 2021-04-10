@@ -2,11 +2,13 @@ const SignUp = require("../models/signup");
 
 var signedUser = "";
 var bcrypt = require("bcryptjs");
+
 exports.addUser = async (req, res) => {
   console.log("Received request to add User");
   try {
     //encrpypt the password.
     var hashedPassword = bcrypt.hashSync(req.body.Password, 8);
+    console.log(req.body);
     //Talk to database
     var matchResult = await SignUp.insertMany({
       UserId: req.body.UserId,
@@ -16,7 +18,7 @@ exports.addUser = async (req, res) => {
       City: req.body.City,
       Province: req.body.Province,
       Zip: req.body.Zip,
-      Unit: req.body.Unit,
+      Unit: req.body.Unit
     });
     //console.log(matchResult);
     res.header("Content-Type", "application/json");
@@ -27,7 +29,8 @@ exports.addUser = async (req, res) => {
     } else {
       res.send(false);
     }
-  } catch {
+  } catch(error) {
+    console.log(error);
     //Do something with failure
     res.status(500);
     res.send({ error: "The was a problem adding user" });
