@@ -1,7 +1,7 @@
 const Cart = require("../models/cart");
 const Product = require("../models/product");
 const Orders = require("../models/order");
-
+const nodemailer = require('nodemailer')
 const user = require("./loginController");
 
 const { v4: uuidv4 } = require("uuid");
@@ -185,6 +185,7 @@ exports.getProducts = async (req, res) => {
 //deleting the product from cart
 exports.deleteCart = async (req, res) => {
   try {
+    console.log("in the delete")
     deleteCart = await Cart.deleteMany({});
     if (!deleteCart) {
       res.status(404);
@@ -212,7 +213,7 @@ exports.addToOrders = async (req, res) => {
       .map((ele) => ele.ProductAmount)
       .reduce((total, price) => total + price, 2);
 
-    console.log("total" + total);
+    console.log("total " + total);
 
     orderCreate = await Orders.insertMany({
       ProductId: req.body.cart.cart[0].ProductId,
@@ -239,3 +240,49 @@ exports.addToOrders = async (req, res) => {
     res.send({ message: `Error in updating cart` });
   }
 };
+
+exports.sendEmail = async (req, res) => {
+
+  var total = req.body.cart.cart
+    .map((ele) => ele.ProductAmount)
+    .reduce((total, price) => total + price, 2);
+
+ // data to be sent via email
+  let ProductName = req.body.cart.cart[0].ProductName;
+  let ProductAmount= req.body.cart.cart[0].ProductAmount;
+  let UserId = req.body.cart.UserId;
+  let OrderId = uuidv4();
+;
+
+
+  //let data=total;
+ //console.log("haa va data" + data)
+  let smtp = nodemailer.createTransport({
+    service: 'Gmail',
+    port: 465,
+    auth: {
+      user: 'moosewalas901@gmail.com',
+      pass: 'Ajax3380'
+    }
+  });
+
+  let mailOptions = {
+    from: 'moosewalas901@gmail.com',
+    to: UserId,
+    subject: 'Here is your cart summary',
+    text: `Dear customer, ${UserId},\n \nYour order of ${ProductName} has been placed with HappyLandPaints.\nYour order will be shipped to your address in couple of days.\nYour Order total is $${ProductAmount}.\nIf you want to check the status of your order, kindly use this ${OrderId} to review it.
+    `
+  };
+
+  smtp.sendMail(mailOptions, function (error, data) {
+    if (error) {
+
+      console.log("Error" + error)
+    }
+    else {
+      console.log('Success')
+    }
+  })
+  smtp.close();
+  res.send(UserId)
+}

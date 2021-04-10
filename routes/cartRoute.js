@@ -16,7 +16,7 @@ route.post('/orders',cartController.addToOrders)
 route.get('/products', cartController.getLoadedCart)
 
 route.delete('/product',cartController.deleteProduct)
-
+route.post('/email',cartController.sendEmail)
 //homepage route
 route.get('/product', cartController.getProduct)
 
